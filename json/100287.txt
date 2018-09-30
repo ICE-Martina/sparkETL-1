@@ -1,0 +1,763 @@
+[
+    {
+        "position": {
+            "x": 1,
+            "y": 1
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/shop_space/124/cloud_data/shengyicanmou/interaction/2018/05/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/interaction/2018/06/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/interaction/2018/07/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y1",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "interaction__thedate",
+                        "interaction__collect_cnt",
+                        "interaction__pc_collect_cnt",
+                        "interaction__wx_collect_cnt",
+                        "interaction__collect_cnt_sum",
+                        "interaction__pc_collect_cnt_sum",
+                        "interaction__wx_collect_cnt_sum"
+                    ],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/2018/05/*",
+                    "/2018/06/*",
+                    "/2018/07/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "interaction"
+    },
+    {
+        "position": {
+            "x": 1,
+            "y": 2
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/shop_space/124/cloud_data/shengyicanmou/trade/2018/05/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/trade/2018/06/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/trade/2018/07/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y2",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "trade__thedate",
+                        "trade__alipay_trade_amt",
+                        "trade__pc_alipay_trade_amt",
+                        "trade__wx_alipay_trade_amt",
+                        "trade__alipay_winner_num",
+                        "trade__pc_alipay_winner_num",
+                        "trade__wx_alipay_winner_num",
+                        "trade__per_cust_trans",
+                        "trade__pc_per_cust_trans",
+                        "trade__wx_per_cust_trans",
+                        "trade__alipay_auction_num",
+                        "trade__pc_alipay_auction_num",
+                        "trade__wx_alipay_auction_num",
+                        "trade__trade_repeat_num",
+                        "trade__pc_trade_repeat_num",
+                        "trade__wx_trade_repeat_num"
+                    ],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/2018/05/*",
+                    "/2018/06/*",
+                    "/2018/07/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "trade"
+    },
+    {
+        "position": {
+            "x": 2,
+            "y": 2
+        },
+        "source": [
+            "etl_x1y1",
+            "etl_x1y2"
+        ],
+        "temp_name": "etl_x2y2",
+        "type": "join",
+        "operation": {
+            "parms": {
+                "type": "inner",
+                "join_tables": {
+                    "right_table": "etl_x1y2",
+                    "left_table": "etl_x1y1"
+                },
+                "join_fields_list": [
+                    {
+                        "right_field": "trade__thedate",
+                        "left_field": "interaction__thedate",
+                        "join_expr": "match"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "position": {
+            "x": 1,
+            "y": 3
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/shop_space/124/cloud_data/shengyicanmou/flow/2018/05/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/flow/2018/06/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/flow/2018/07/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y3",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "flow__thedate",
+                        "flow__uv",
+                        "flow__pc_uv",
+                        "flow__wx_uv",
+                        "flow__pv",
+                        "flow__pc_pv",
+                        "flow__wx_pv",
+                        "flow__visit_repeat_num",
+                        "flow__pc_visit_repeat_num",
+                        "flow__wx_visit_repeat_num",
+                        "flow__per_visit_duration",
+                        "flow__pc_per_visit_duration",
+                        "flow__wx_per_visit_duration",
+                        "flow__bounce_rate",
+                        "flow__pc_bounce_rate",
+                        "flow__wx_bounce_rate"
+                    ],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/2018/05/*",
+                    "/2018/06/*",
+                    "/2018/07/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "flow"
+    },
+    {
+        "position": {
+            "x": 2,
+            "y": 3
+        },
+        "source": [
+            "etl_x2y2",
+            "etl_x1y3"
+        ],
+        "temp_name": "etl_x2y3",
+        "type": "join",
+        "operation": {
+            "parms": {
+                "type": "inner",
+                "join_tables": {
+                    "right_table": "etl_x1y3",
+                    "left_table": "etl_x2y2"
+                },
+                "join_fields_list": [
+                    {
+                        "right_field": "flow__thedate",
+                        "left_field": "interaction__thedate",
+                        "join_expr": "match"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "position": {
+            "x": 1,
+            "y": 4
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/shop_space/124/cloud_data/shengyicanmou/conversion/2018/05/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/conversion/2018/06/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/conversion/2018/07/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y4",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "conversion__thedate",
+                        "conversion__cr",
+                        "conversion__pc_cr",
+                        "conversion__wx_cr"
+                    ],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/2018/05/*",
+                    "/2018/06/*",
+                    "/2018/07/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "conversion"
+    },
+    {
+        "position": {
+            "x": 2,
+            "y": 4
+        },
+        "source": [
+            "etl_x2y3",
+            "etl_x1y4"
+        ],
+        "temp_name": "etl_x2y4",
+        "type": "join",
+        "operation": {
+            "parms": {
+                "type": "inner",
+                "join_tables": {
+                    "right_table": "etl_x1y4",
+                    "left_table": "etl_x2y3"
+                },
+                "join_fields_list": [
+                    {
+                        "right_field": "conversion__thedate",
+                        "left_field": "interaction__thedate",
+                        "join_expr": "match"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "position": {
+            "x": 1,
+            "y": 5
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/shop_space/124/cloud_data/shengyicanmou/logistics/2018/05/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/logistics/2018/06/*",
+                    "/shop_space/124/cloud_data/shengyicanmou/logistics/2018/07/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y5",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "logistics__thedate",
+                        "logistics__alipay_trade_cnt"
+                    ],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/2018/05/*",
+                    "/2018/06/*",
+                    "/2018/07/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "logistics"
+    },
+    {
+        "position": {
+            "x": 2,
+            "y": 5
+        },
+        "source": [
+            "etl_x2y4",
+            "etl_x1y5"
+        ],
+        "temp_name": "etl_x2y5",
+        "type": "join",
+        "operation": {
+            "parms": {
+                "type": "inner",
+                "join_tables": {
+                    "right_table": "etl_x1y5",
+                    "left_table": "etl_x2y4"
+                },
+                "join_fields_list": [
+                    {
+                        "right_field": "logistics__thedate",
+                        "left_field": "interaction__thedate",
+                        "join_expr": "match"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "position": {
+            "x": 3,
+            "y": 5
+        },
+        "source": [
+            "etl_x2y5"
+        ],
+        "temp_name": "etl_x3y5",
+        "type": "clean",
+        "operation": {
+            "parms": [
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "flow__visit_repeat_num/flow__uv",
+                            "addfield_dim": "etl_x3y5__cal_1",
+                            "field": {
+                                "flow__visit_repeat_num": "/shop_space/124/cloud_data/shengyicanmou/flow/",
+                                "flow__uv": "/shop_space/124/cloud_data/shengyicanmou/flow/"
+                            },
+                            "addfield_name": "回访客占比"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c1",
+                    "clean_index": 1
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "flow__pc_visit_repeat_num/flow__pc_uv",
+                            "addfield_dim": "etl_x3y5__cal_2",
+                            "field": {
+                                "flow__pc_uv": "/shop_space/124/cloud_data/shengyicanmou/flow/",
+                                "flow__pc_visit_repeat_num": "/shop_space/124/cloud_data/shengyicanmou/flow/"
+                            },
+                            "addfield_name": "PC端回访客占比"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c2",
+                    "clean_index": 2
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "flow__wx_visit_repeat_num/flow__wx_uv",
+                            "addfield_dim": "etl_x3y5__cal_3",
+                            "field": {
+                                "flow__wx_uv": "/shop_space/124/cloud_data/shengyicanmou/flow/",
+                                "flow__wx_visit_repeat_num": "/shop_space/124/cloud_data/shengyicanmou/flow/"
+                            },
+                            "addfield_name": "无线端回访客占比"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c3",
+                    "clean_index": 3
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "trade__alipay_trade_amt/trade__alipay_auction_num",
+                            "addfield_dim": "etl_x3y5__cal_4",
+                            "field": {
+                                "trade__alipay_auction_num": "/shop_space/124/cloud_data/shengyicanmou/trade/",
+                                "trade__alipay_trade_amt": "/shop_space/124/cloud_data/shengyicanmou/trade/"
+                            },
+                            "addfield_name": "件单价"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c4",
+                    "clean_index": 4
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "trade__pc_alipay_trade_amt/trade__alipay_trade_amt",
+                            "addfield_dim": "etl_x3y5__cal_5",
+                            "field": {
+                                "trade__pc_alipay_trade_amt": "/shop_space/124/cloud_data/shengyicanmou/trade/",
+                                "trade__alipay_trade_amt": "/shop_space/124/cloud_data/shengyicanmou/trade/"
+                            },
+                            "addfield_name": "PC端销售占比"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c5",
+                    "clean_index": 5
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "trade__wx_alipay_trade_amt/trade__alipay_trade_amt",
+                            "addfield_dim": "etl_x3y5__cal_6",
+                            "field": {
+                                "trade__wx_alipay_trade_amt": "/shop_space/124/cloud_data/shengyicanmou/trade/",
+                                "trade__alipay_trade_amt": "/shop_space/124/cloud_data/shengyicanmou/trade/"
+                            },
+                            "addfield_name": "无线端销售占比"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c6",
+                    "clean_index": 6
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "flow__pc_uv/flow__uv",
+                            "addfield_dim": "etl_x3y5__cal_7",
+                            "field": {
+                                "flow__uv": "/shop_space/124/cloud_data/shengyicanmou/flow/",
+                                "flow__pc_uv": "/shop_space/124/cloud_data/shengyicanmou/flow/"
+                            },
+                            "addfield_name": "PC端访客占比"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c7",
+                    "clean_index": 7
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "flow__wx_uv/flow__uv",
+                            "addfield_dim": "etl_x3y5__cal_8",
+                            "field": {
+                                "flow__uv": "/shop_space/124/cloud_data/shengyicanmou/flow/",
+                                "flow__wx_uv": "/shop_space/124/cloud_data/shengyicanmou/flow/"
+                            },
+                            "addfield_name": "无线端访客占比"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c8",
+                    "clean_index": 8
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "VALUE_LAST_YEAR('DAY',trade__thedate,trade__alipay_trade_amt)",
+                            "addfield_dim": "etl_x3y5__cal_9",
+                            "field": {
+                                "trade__alipay_trade_amt": "/shop_space/124/cloud_data/shengyicanmou/trade/",
+                                "trade__thedate": "/shop_space/124/cloud_data/shengyicanmou/trade/"
+                            },
+                            "addfield_name": "去年同期销售额"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c9",
+                    "clean_index": 9
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "VALUE_LAST_YEAR('DAY',flow__thedate,flow__uv)",
+                            "addfield_dim": "etl_x3y5__cal_10",
+                            "field": {
+                                "flow__thedate": "/shop_space/124/cloud_data/shengyicanmou/flow/",
+                                "flow__uv": "/shop_space/124/cloud_data/shengyicanmou/flow/"
+                            },
+                            "addfield_name": "去年同期访客数"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c10",
+                    "clean_index": 10
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "VALUE_LAST_YEAR('DAY',trade__thedate,trade__alipay_winner_num)",
+                            "addfield_dim": "etl_x3y5__cal_11",
+                            "field": {
+                                "trade__alipay_winner_num": "/shop_space/124/cloud_data/shengyicanmou/trade/",
+                                "trade__thedate": "/shop_space/124/cloud_data/shengyicanmou/trade/"
+                            },
+                            "addfield_name": "去年同期支付买家数"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c11",
+                    "clean_index": 11
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "etl_x3y5__cal_9/etl_x3y5__cal_11",
+                            "addfield_dim": "etl_x3y5__cal_12",
+                            "field": {},
+                            "addfield_name": "去年同期客单价"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c12",
+                    "clean_index": 12
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "etl_x3y5__cal_9/etl_x3y5__cal_10",
+                            "addfield_dim": "etl_x3y5__cal_13",
+                            "field": {},
+                            "addfield_name": "去年同期转化率"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c12",
+                    "clean_index": 13
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "ACCUMULATE_WITH_PERIOD('MONTH',1,trade__thedate,trade__alipay_trade_amt)",
+                            "addfield_dim": "etl_x3y5__cal_14",
+                            "field": {
+                                "trade__alipay_trade_amt": "/shop_space/124/cloud_data/shengyicanmou/trade/",
+                                "trade__thedate": "/shop_space/124/cloud_data/shengyicanmou/trade/"
+                            },
+                            "addfield_name": "月度累积销售额"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c14",
+                    "clean_index": 14
+                },
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "LEFT(trade__thedate,7)",
+                            "addfield_dim": "etl_x3y5__cal_15",
+                            "field": {
+                                "trade__thedate": "/shop_space/124/cloud_data/shengyicanmou/trade/"
+                            },
+                            "addfield_name": "年月"
+                        }
+                    },
+                    "temp_name": "etl_x3y5_c15",
+                    "clean_index": 15
+                }
+            ]
+        }
+    },
+    {
+        "position": {
+            "x": 1,
+            "y": 6
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/shop_space/124/cloud_data/oa/statsellplan/2018/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y6",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "statsellplan__shop_id",
+                        "statsellplan__thedate",
+                        "statsellplan__plan"
+                    ],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/2018/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "statsellplan"
+    },
+    {
+        "position": {
+            "x": 2,
+            "y": 6
+        },
+        "source": [
+            "etl_x1y6"
+        ],
+        "temp_name": "etl_x2y6",
+        "type": "clean",
+        "operation": {
+            "parms": [
+                {
+                    "clean_process": {
+                        "type": "filter",
+                        "parms": {
+                            "filter_expr": "statsellplan__shop_id=124"
+                        }
+                    },
+                    "temp_name": "etl_x2y6_c1",
+                    "clean_index": 1
+                }
+            ]
+        }
+    },
+    {
+        "position": {
+            "x": 3,
+            "y": 6
+        },
+        "source": [
+            "etl_x3y5",
+            "etl_x2y6"
+        ],
+        "temp_name": "etl_x3y6",
+        "type": "join",
+        "operation": {
+            "parms": {
+                "type": "inner",
+                "join_tables": {
+                    "right_table": "etl_x2y6",
+                    "left_table": "etl_x3y5"
+                },
+                "join_fields_list": [
+                    {
+                        "right_field": "statsellplan__thedate",
+                        "left_field": "etl_x3y5__cal_15",
+                        "join_expr": "match"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "position": {
+            "x": 4,
+            "y": 6
+        },
+        "source": [
+            "etl_x3y6"
+        ],
+        "temp_name": "etl_x4y6",
+        "type": "clean",
+        "operation": {
+            "parms": [
+                {
+                    "clean_process": {
+                        "type": "calculate",
+                        "parms": {
+                            "addfield_expr": "etl_x3y5__cal_14/statsellplan__plan",
+                            "addfield_dim": "etl_x4y6__cal_1",
+                            "field": {
+                                "statsellplan__plan": "/shop_space/124/cloud_data/oa/statsellplan/"
+                            },
+                            "addfield_name": "月度累积完成率"
+                        }
+                    },
+                    "temp_name": "etl_x4y6_c1",
+                    "clean_index": 1
+                }
+            ]
+        }
+    },
+    {
+        "project_id": 124,
+        "position": {
+            "x": 5,
+            "y": 6
+        },
+        "source": [
+            "etl_x4y6"
+        ],
+        "temp_name": "etl_x5y6",
+        "model_id": 10002,
+        "type": "output",
+        "operation": {
+            "parms": {
+                "type": "save_to_file",
+                "parms": {
+                    "file_type": "csv",
+                    "name": "shop_analysis"
+                }
+            }
+        }
+    }
+]

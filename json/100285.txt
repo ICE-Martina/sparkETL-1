@@ -1,0 +1,167 @@
+[
+    {
+        "position": {
+            "x": 1,
+            "y": 1
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/bi/share/qingmu/oa_temp/100013/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y1",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "refshop__id",
+                        "refshop__sname",
+                        "refshop__department",
+                        "refshop__platfrom",
+                        "refshop__company_ascription",
+                        "refshop__business_type",
+                        "refshop__project_id"
+                    ],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "refshop"
+    },
+    {
+        "position": {
+            "x": 2,
+            "y": 1
+        },
+        "source": [
+            "etl_x1y1"
+        ],
+        "temp_name": "etl_x2y1",
+        "type": "clean",
+        "operation": {
+            "parms": [
+                {
+                    "clean_process": {
+                        "type": "filter",
+                        "parms": {
+                            "filter_expr": "refshop__project_id=124"
+                        }
+                    },
+                    "temp_name": "etl_x2y1_c1",
+                    "clean_index": 1
+                }
+            ]
+        }
+    },
+    {
+        "position": {
+            "x": 1,
+            "y": 2
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/shop_space/124/cloud_data/oa/statshopdata/2018/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y2",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "statshopdata__shop_id",
+                        "statshopdata__thedate",
+                        "statshopdata__sum_money",
+                        "statshopdata__sum_month_money",
+                        "statshopdata__sum_cg_money",
+                        "statshopdata__sum_hd_money",
+                        "statshopdata__sum_jhs_money"
+                    ],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/2018/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "statshopdata"
+    },
+    {
+        "position": {
+            "x": 2,
+            "y": 2
+        },
+        "source": [
+            "etl_x2y1",
+            "etl_x1y2"
+        ],
+        "temp_name": "etl_x2y2",
+        "type": "join",
+        "operation": {
+            "parms": {
+                "type": "inner",
+                "join_tables": {
+                    "right_table": "etl_x1y2",
+                    "left_table": "etl_x2y1"
+                },
+                "join_fields_list": [
+                    {
+                        "right_field": "statshopdata__shop_id",
+                        "left_field": "refshop__project_id",
+                        "join_expr": "match"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "project_id": 124,
+        "position": {
+            "x": 3,
+            "y": 2
+        },
+        "source": [
+            "etl_x2y2"
+        ],
+        "temp_name": "etl_x3y2",
+        "model_id": 10003,
+        "type": "output",
+        "operation": {
+            "parms": {
+                "type": "save_to_file",
+                "parms": {
+                    "file_type": "csv",
+                    "name": "company_data"
+                }
+            }
+        }
+    }
+]
