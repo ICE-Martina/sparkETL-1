@@ -15,3 +15,8 @@ spark-submit --master spark://node1:7077 sparkETLv2.jar model_id
 model_id为hdfs上/bi/model的json文件，只需填写model_id，代码会自动拼接为model_id.json
 #20180820
 优化了代码，registerudf为在网上引用了一段java的代码，可以解析jar包中一个package下的类名，这个用于自动注册udf时，可简化读取方式。
+#20180921
+1添加了VALUE_LAST_MONTH和VALUE_LAST_YEAR两个功能
+2完善了input对路径的存在判断
+3output时，判断hive是否已经有对应的查询表，如果没有就创建
+4output时，把每个店的输出文件改名，并copy到指定临时表
