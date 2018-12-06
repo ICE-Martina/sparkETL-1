@@ -1,0 +1,22 @@
+{
+        "project_id": 202,
+        "position": {
+            "x": 4,
+            "y": 1
+        },
+        "source": [
+            "etl_x3y1"
+        ],
+        "temp_name": "etl_x4y1",
+        "model_id": 10017,
+        "type": "output",
+        "operation": {
+            "parms": {
+                "type": "save_to_file",
+                "parms": {
+                    "file_type": "csv",
+                    "name": "shop_flow_analysis"
+                }
+            }
+        }
+    }

@@ -1,0 +1,37 @@
+{
+        "position": {
+            "x": 5,
+            "y": 3
+        },
+        "source": [
+            "etl_x4y3"
+        ],
+        "temp_name": "etl_x5y3",
+        "type": "clean",
+        "operation": {
+            "parms": [
+                {
+                    "clean_process": {
+                        "type": "nullfill",
+                        "parms": {
+                            "null_field": "statsellplan__shop_id",
+                            "fill_value": "202"
+                        }
+                    },
+                    "temp_name": "etl_x5y3_c1",
+                    "clean_index": 1
+                },
+                {
+                    "clean_process": {
+                        "type": "nullfill",
+                        "parms": {
+                            "null_field": "brandsellplan__shop_id",
+                            "fill_value": "202"
+                        }
+                    },
+                    "temp_name": "etl_x5y3_c2",
+                    "clean_index": 2
+                }
+            ]
+        }
+    }

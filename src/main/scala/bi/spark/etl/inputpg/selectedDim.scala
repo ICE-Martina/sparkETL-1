@@ -13,9 +13,9 @@ import scala.collection.mutable.MutableList
 object selectedDim {
   def reselectdim(dimlist:List[String]):List[String]={
     var newlist:List[String] = List[String]()
-    for(i <- dimlist){
+    dimlist.foreach( i => {
       newlist = newlist :+ i.split("__")(1)
-    }
+    })
     newlist
   }
 }

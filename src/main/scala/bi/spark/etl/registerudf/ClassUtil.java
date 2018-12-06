@@ -5,15 +5,12 @@ https://www.cnblogs.com/rinack/p/7606285.html
  */
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.JarURLConnection;
 import java.net.URLDecoder;
 import java.util.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 

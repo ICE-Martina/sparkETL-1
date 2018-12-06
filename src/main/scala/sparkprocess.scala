@@ -106,35 +106,39 @@ object sparkprocess {
 //    }
 
     //实际运行
-    val json_info = sc.textFile(s"hdfs://ns1/bi/model/${model_id}.json").first()
+    val json_info = sc.textFile(s"hdfs://qmyrc/bi/model/${model_id}.json").first()
     //把[{},{},{}]解释回数组元素为字典字符串的形式
-    val testjson = JSON.parseArray(json_info)
+    val json_text = JSON.parseArray(json_info)
     //获取数组长度
-    val json_size = testjson.size()
+//    val json_size = testjson.size()
     //由于不能保证列表的顺序，所以要按照position再排序依次
     //把position拿出，组成{"position":[原对应内容]}
-    val map_josn = mutable.Map[Map[String,Double],Map[String, Any]]()
-    for(i <- Array.range(0,json_size)){
+    val josn_map = mutable.Map[Map[String,Double],Map[String, Any]]()
+    Array.range(0,json_text.size()).foreach( i => {
       //把字典型的字符串转为字典
-      val each_config= jsonAnalyse.strToDict(testjson.getJSONObject(i).toString)
+      val each_config= jsonAnalyse.strToDict(json_text.getJSONObject(i).toString)
       //遍历每个数组，对应的position与内容
       val each_mapkey = each_config("position").asInstanceOf[Map[String,Double]]
-      map_josn(each_mapkey) = each_config
+      josn_map(each_mapkey) = each_config
 //      println(each_config("position"),map_josn(each_mapkey))
 //      pro.act(each_config,api_data_dict)
-    }
+    })
     //======================================================================>
     //把可能乱序的列表，通过position的x,y重新排序
-    val jsonsort = jsonAnalyse.sortDictToArray(map_josn)
+    val json_sort = jsonAnalyse.sortDictToArray(josn_map)
 //    val json_size2 = testjson.size()
-    println(jsonsort.length)
-    for(i <- jsonsort){
-      println(i)
-    }
-    for(each <- jsonsort){
+    println(json_sort.length)
+
+    json_sort.foreach( x => println(x))
+
+    json_sort.foreach( each => {
       println(each)
-      pro.act(each,api_data_dict)
-    }
+      pro.actions(each,api_data_dict)
+    })
+//    for(each <- jsonsort){
+//      println(each)
+//      pro.actions(each,api_data_dict)
+//    }
 
 
 
@@ -152,9 +156,11 @@ object sparkprocess {
 
 
     //实例一个调用返回值的api接口，把表结构内容传出
-    //http://192.168.15.51:8181/docs/bi_facade/144
+    //http://192.168.15.154:10086/callback/model/schema/create
     new PostApi(model_id,api_data)
 
 //    TimeUnit.MINUTES.sleep(40)
+
+    sparksql.close()
   }
 }

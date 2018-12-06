@@ -1,0 +1,28 @@
+{
+        "position": {
+            "x": 3,
+            "y": 1
+        },
+        "source": [
+            "etl_x2y1"
+        ],
+        "temp_name": "etl_x3y1",
+        "type": "clean",
+        "operation": {
+            "parms": [
+                {
+                    "clean_process": {
+                        "type": "filter",
+                        "parms": {
+                            "filter_expr": "wx_shop_flow_source__source_detail != '汇总'",
+                            "select_dim": [
+                                12437
+                            ]
+                        }
+                    },
+                    "temp_name": "etl_x3y1_c1",
+                    "clean_index": 1
+                }
+            ]
+        }
+    }

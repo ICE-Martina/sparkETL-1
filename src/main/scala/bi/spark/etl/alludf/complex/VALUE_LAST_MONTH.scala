@@ -1,6 +1,6 @@
 package bi.spark.etl.alludf.complex
 
-import bi.spark.etl.alludf.datefun.dateReckon.dateReckonMONTH
+import bi.spark.etl.alludf.datefun.dateReckon.dateReckonMonth
 import bi.spark.etl.alludf.datefun.dayJudge.dayJudgeDay
 import bi.spark.etl.inputpg.fileExists.fileExistsJudge
 import org.apache.spark.sql
@@ -13,7 +13,7 @@ class VALUE_LAST_MONTH{
   def func(sparksql:SparkSession,df:sql.DataFrame,parms:Map[String,String]):sql.DataFrame={
     //注册两个函数
     val dayjudge = udf(dayJudgeDay)
-    val datereckon = udf(dateReckonMONTH)
+    val datereckon = udf(dateReckonMonth)
     //=================================================================================
     //获取field下的内容
     val field = parms("field").asInstanceOf[Map[String,String]]
@@ -34,15 +34,15 @@ class VALUE_LAST_MONTH{
       df_tmp = df_tmp.withColumn("YearLastMonthDay",dayjudge(df_tmp(expr(2)),df_tmp("YearLastMonthDay")))
       //获取需要计算的日期，去重，后面用来拼接目录
       var datelist = df_tmp.select("YearLastMonthDay").distinct().collect()
-      for(i <- datelist) {
+      datelist.foreach( i =>{
         val year = i.getString(0).slice(0,4)
         val month = i.getString(0).slice(5,7)
         set_path += fixed_path + s"${year}/${month}"
-      }
+      })
       //判断需要读入的目录是否存在，不存在就删去
       val path_list = fileExistsJudge(set_path).toList
       if(path_list.isEmpty){
-        df_tmp = df_tmp.withColumn("Value_Last_Month",lit(0)).drop("YearLastMonthDay")//.drop("AbsoluteDay")
+        df_tmp = df_tmp.withColumn("Value_Last_Month",lit(0.0)).drop("YearLastMonthDay")//.drop("AbsoluteDay")
       }else{
         //递归读入数据
         var judge_table = readAndUnion(sparksql,path_list,true,"utf-8")
@@ -57,15 +57,15 @@ class VALUE_LAST_MONTH{
       df_tmp = df_tmp.withColumn("YearLastMonth",substring(col("YearLastMonthDay"),0,7)).drop("YearLastMonthDay")
       //获取需要计算的日期，去重，后面用来拼接目录
       var datelist = df_tmp.select("YearLastMonth").distinct().collect()
-      for(i <- datelist) {
+      datelist.foreach( i =>{
         val year = i.getString(0).slice(0,4)
         val month = i.getString(0).slice(5,7)
         set_path += fixed_path + s"${year}/${month}"
-      }
+      })
       //判断需要读入的目录是否存在，不存在就删去
       val path_list = fileExistsJudge(set_path).toList
       if(path_list.isEmpty){
-        df_tmp = df_tmp.withColumn("Value_Last_Month",lit(0)).drop("YearLastMonthDay")//.drop("AbsoluteDay")
+        df_tmp = df_tmp.withColumn("Value_Last_Month",lit(0.0)).drop("YearLastMonthDay")//.drop("AbsoluteDay")
       }else{
         //递归读入数据
         var judge_table = readAndUnion(sparksql,path_list,true,"utf-8")

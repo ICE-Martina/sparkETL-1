@@ -29,6 +29,7 @@ object cleanAct {
 //    println(parms)
 
     ctype match {
+        //筛选
       case "filter" => {
         //传入spark上下文，dataframe字典，操作数据源名字，结果表名字，每一个处理操作
         typeFilter.filter(sparksql,df_list,tmp_table,parms,postdata)
@@ -49,6 +50,11 @@ object cleanAct {
         //还没实现此方法
         //传入spark上下文，dataframe字典，操作数据源名字，结果表名字，每一个处理操作
         typeSplit.split(sparksql,df_list,tmp_table,parms,postdata)
+      }
+      case "nullfill" => {
+        //还没实现此方法
+        //传入spark上下文，dataframe字典，操作数据源名字，结果表名字，每一个处理操作
+        typeNullFill.nullfill(sparksql,df_list,tmp_table,parms,postdata)
       }
     }
   }

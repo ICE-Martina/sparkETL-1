@@ -15,29 +15,27 @@ import scala.collection.mutable.ArrayBuffer
   *
   */
 
-object UdfObject {
+object udfObject {
   def functions(sparksql: SparkSession) = {
     //指定获取这个包下的类
     val udfclass = ClassUtil.getClasses("bi.spark.etl.alludf.easy").toArray
     //用于注册的类名称列表
     val udflist = ArrayBuffer[String]()
     //遍历所有类的名字   例：class bi.spark.etl.alludf.UdfDemo
-    for(i <- udfclass){
+    udfclass.foreach( i => {
       //分割，取后面的符
-//      println(i)
       udflist += i.toString.split(" ").last
-    }
+    })
     //筛选不包含$的元素，打jar包后，有些类会生成xxx$xx字样
     val udfnames = udflist.filterNot( _.contains("$"))
 
 
-    for (i <- udfnames) {
-//      println(i)
+    udfnames.foreach( i =>{
       //把每个类实例化，同时会注册成sparksql函数
       val classA = Class.forName(i)
       val cons = classA.getConstructors
       cons(0).newInstance(sparksql)
-    }
+    })
   }
 }
 

@@ -1,0 +1,44 @@
+{
+        "position": {
+            "x": 1,
+            "y": 1
+        },
+        "source": {
+            "type": "excel",
+            "config": {
+                "path": [
+                    "/shop_space/202/cloud_data/shengyicanmou/wx_shop_flow_source/*/*"
+                ]
+            }
+        },
+        "temp_name": "etl_x1y1",
+        "type": "input",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [
+                        "wx_shop_flow_source__source",
+                        "wx_shop_flow_source__source_detail",
+                        "wx_shop_flow_source__uv",
+                        "wx_shop_flow_source__uv_change",
+                        "wx_shop_flow_source__gmv_trade_amt",
+                        "wx_shop_flow_source__gmv_trade_amt_change",
+                        "wx_shop_flow_source__gmv_winner_num"],
+                    "dim_rename_list": [],
+                    "dim_filter_list": [],
+                    "dim_retype_list": []
+                },
+                "multiple_files": [
+                    "/*/*"
+                ],
+                "text_settings": {
+                    "skip_rows": 0,
+                    "field_separator": "comma",
+                    "character_set": "utf-8",
+                    "header": "contains",
+                    "text_qualifier": "none"
+                }
+            }
+        },
+        "table": "wx_shop_flow_source"
+    }

@@ -35,10 +35,10 @@ object typeCalculate {
       //用于注册的类名称列表
       val udflist = ArrayBuffer[String]()
       //遍历所有类的名字   例：class bi.spark.etl.alludf.UdfDemo
-      for(i <- udfclass){
+      udfclass.foreach( i =>{
           //分割，取后面的符
             udflist += i.toString.split(" ").last
-      }
+      })
       //筛选不包含$的元素，打jar包后，有些类会生成xxx$xx字样
       val udfnames = udflist.filterNot( _.contains("$"))
       //当前calculate的函数名字

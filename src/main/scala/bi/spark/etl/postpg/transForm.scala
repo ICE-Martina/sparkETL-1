@@ -1,5 +1,5 @@
 package bi.spark.etl.postpg
-import bi.spark.etl.postpg.typeTrans.typeChang
+import bi.spark.etl.postpg.typeTrans.typeChange
 
 /**
   * Description:
@@ -27,7 +27,7 @@ object transForm {
     var api_str = ""
     //遍历每个值，形成api需要的字符串形式
     for(i <- dict_values){
-      api_str += s"""{"name":"${i("name")}","alias":"${i("alias")}","type":"${typeChang(i("type"))}"},"""
+      api_str += s"""{"name":"${i("name")}","alias":"${i("alias")}","type":"${typeChange(i("type"))}"},"""
     }
     //init取除最后一个元素外的所有元素
     s"""[${api_str.init}]"""

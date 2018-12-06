@@ -2,6 +2,8 @@ package bi.spark.etl.joinpg
 
 import bi.spark.etl.jsonAnalyse
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
+import bi.spark.etl.alludf.datefun.nullFill.valueNullFill
 
 /**
   * Description:
@@ -34,8 +36,23 @@ object join {
     df_list(tables("left_table")).show()
     df_list(tables("right_table")).show()
     //join的主函数
-    df_list(temp_name) = df_list(tables("left_table")).join(df_list(tables("right_table")),df_list(tables("left_table"))(join_fields("left_field")) === df_list(tables("right_table"))(join_fields("right_field")),operation_parms("type").toString)
-
+    if(operation_parms("type").toString == "outer"){
+      println("outer")
+      val daynullfill = udf(valueNullFill)
+      df_list(temp_name) = df_list(tables("left_table")).join(df_list(tables("right_table")),df_list(tables("left_table"))(join_fields("left_field")) === df_list(tables("right_table"))(join_fields("right_field")),operation_parms("type").toString)
+      df_list(temp_name) = df_list(temp_name).withColumn(join_fields("left_field"),daynullfill(col(join_fields("left_field")),col(join_fields("right_field"))))
+      df_list(temp_name) = df_list(temp_name).withColumn(join_fields("right_field"),daynullfill(col(join_fields("right_field")),col(join_fields("left_field"))))
+      df_list(temp_name).printSchema()
+    }else{
+      println(tables("left_table"))
+      println(tables("right_table"))
+      println(join_fields("left_field"))
+      println(join_fields("right_field"))
+      df_list(temp_name) = df_list(tables("left_table")).join(df_list(tables("right_table")),df_list(tables("left_table"))(join_fields("left_field")) === df_list(tables("right_table"))(join_fields("right_field")),operation_parms("type").toString)
+      df_list(temp_name).printSchema()
+    }
+//    df_list(temp_name) = df_list(tables("left_table")).join(df_list(tables("right_table")),df_list(tables("left_table"))(join_fields("left_field")) === df_list(tables("right_table"))(join_fields("right_field")),operation_parms("type").toString)
+//    df_list(temp_name).printSchema()
     df_list(temp_name).show()
 
   }

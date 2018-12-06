@@ -6,7 +6,7 @@ import bi.spark.etl.inputpg.input.input
 import bi.spark.etl.joinpg.join.join
 import bi.spark.etl.outputpg.output.output
 import bi.spark.etl.pivotpg.pivot.pivot
-import bi.spark.etl.registerudf.UdfObject
+import bi.spark.etl.registerudf.udfObject
 import bi.spark.etl.unionpg.union.union
 import org.apache.spark.sql.SparkSession
 
@@ -25,13 +25,14 @@ class DataProcess(sparksql:SparkSession,df_list:scala.collection.mutable.Map[Str
   //实例化AllUdf这个类，这个类可以添加任何需要用的udf函数
   //    val alludf = new UdfClass(sparksql:SparkSession)
   //调用functions方法，注册所有alludf.easy下的函数
-  UdfObject.functions(sparksql)
+  udfObject.functions(sparksql)
 
   // 判断每一段json所需要的操作，并执行指定函数
-  def act(metajson: Map[String, Any],postdata:scala.collection.mutable.Map[String,Map[String,String]]) = {
+  def actions(metajson: Map[String, Any], postdata:scala.collection.mutable.Map[String,Map[String,String]]) = {
 
     //获取处理类型
     val act_type = metajson("type").toString
+    println(act_type)
     println(metajson("temp_name").toString)
     act_type match {
 

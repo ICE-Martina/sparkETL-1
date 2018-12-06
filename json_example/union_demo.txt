@@ -1,0 +1,25 @@
+{
+        "position": {
+            "x": 4,
+            "y": 2
+        },
+        "source": [
+            "etl_x3y1",
+            "etl_x3y2"
+        ],
+        "temp_name": "etl_x4y2",
+        "type": "union",
+        "operation": {
+            "parms": {
+                "dim_settings": {
+                    "selected_dim_list": [],
+                    "dim_rename_list": [],
+                    "dim_retype_list": []
+                },
+                "inputs_list": [
+                    "etl_x3y1",
+                    "etl_x3y2"
+                ]
+            }
+        }
+    }

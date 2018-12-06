@@ -11,21 +11,21 @@ object fileExists {
     val out_set = scala.collection.mutable.Set[String]()
     //HDFS路径判断
     val configuration = new Configuration()
-    val uri = URI.create("hdfs://ns1/")
+    val uri = URI.create("hdfs://qmyrc/")
     val fileSystem = FileSystem.get(uri,configuration)
-    for(i <- filelist){
+    filelist.foreach( file => {
       try{
-        val path = new Path(i.replace("*",""))
+        val path = new Path(file.replace("*",""))
         //判断目录是否存在
         val file_list = FileUtil.stat2Paths(fileSystem.listStatus(path))
-        //不存在的路径或者路径下没文件的目录删除
+        //不存在的路径或者路径下没文件的目录删除(不加入到input列中)
         if(fileSystem.exists(path) && file_list.nonEmpty){
-          out_set.add(i)
+          out_set.add(file)
         }
       }catch {
         case ex:FileNotFoundException => println(ex)
       }
-    }
+    })
     ////    val uri1 = URI.create("hdfs://ns1/")
     ////    //获取文件系统
     ////    val fileSystem1 = FileSystem.get(uri1, configuration)

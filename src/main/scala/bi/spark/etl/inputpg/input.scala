@@ -7,7 +7,7 @@ import bi.spark.etl.inputpg.readCsvUnion.readAndUnion
 import org.apache.spark._
 import bi.spark.etl.postpg.transForm.dataTrans
 import bi.spark.etl.inputpg.fileExists._
-import bi.spark.etl.inputpg.timestamp2string.timeToString
+import bi.spark.etl.inputpg.timestamp2String.timeToString
 import org.apache.spark.sql.types.TimestampType
 /**
   * Description:
@@ -45,7 +45,8 @@ object input {
     val dim_settings = jsonAnalyse.anyToDictAny(operation_parms("dim_settings"))
 
     //用户选择的维度组装__后的数组
-    val selected_dim_list = dim_settings("selected_dim_list").asInstanceOf[List[String]]
+    var selected_dim_list = dim_settings("selected_dim_list").asInstanceOf[List[String]]
+    if(selected_dim_list.isEmpty){selected_dim_list = List[String]("*")}
 
     //解析读入数据时，源数据的列名
     val metadim = reselectdim(selected_dim_list)
@@ -83,7 +84,7 @@ object input {
       }
 
         //csv读入,保证单次读入的文件，字段格式一致
-      case "excel" => {
+      case "excel" | "api" => {
 
         //解析json，获取operation下source的config字典
         val source_config = jsonAnalyse.anyToDictAny(source("config"))
@@ -119,26 +120,34 @@ object input {
 //        }
         //遍历文件路径为set类型
         var set_path = scala.collection.mutable.Set[String]()
-        for(i <- file_path){
-          //出去原路径描述的*
+        file_path.foreach( i =>{
+          //除去原路径描述的*
           set_path += i
-        }
+        })
         //筛选不存在的路径
         val exists_set = fileExistsJudge(set_path)
         //转为list
         val exists_list = exists_set.toList
         //按用户提交的需求，筛选所需要的字段
-        if(exists_list.nonEmpty ){
-          df_list(temp_name) = readAndUnion(sparksql,exists_list,header,text_settings("character_set")).selectExpr(metadim:_*)
-        }else{
+        if(exists_list.nonEmpty) {
+          df_list(temp_name) = readAndUnion(sparksql, exists_list, header, text_settings("character_set")).selectExpr(metadim: _*)
+        }else
+          //        }else if(exists_list.nonEmpty && selected_dim_list.isEmpty){
           //传入值为空是，则返回所有列
-          df_list(temp_name) = readAndUnion(sparksql,exists_list,header,text_settings("character_set"))
+//          df_list(temp_name) = readAndUnion(sparksql,exists_list,header,text_settings("character_set"))
+//        }else{
+        {
+          //读入时，没有该数据的空白数据（只有表头，防止报错）
+          val re_pattern = """/shop_space/\w+/""".r
+          val empty_path = List[String](file_path(0).replace((re_pattern findAllIn file_path(0)).toList(0),"/shop_space/99999/"))
+          println("empty_path,read" + empty_path(0))
+          df_list(temp_name) = readAndUnion(sparksql,empty_path,header,text_settings("character_set")).selectExpr(metadim: _*)
         }
         //读入数据的数据类型
-        val dfschema =df_list(temp_name).schema
+        val df_schema =df_list(temp_name).schema
         //返回结果
         for(i <- Array.range(0,metadim.length)){
-          if(dfschema(i).dataType == TimestampType){
+          if(df_schema(i).dataType == TimestampType){
             //时间类型的列转为字符串 XXXX-XX-XX的日期格式
             df_list(temp_name) = timeToString(df_list(temp_name),metadim(i))
           }
@@ -146,7 +155,7 @@ object input {
         }
         df_list(temp_name).printSchema()
         dataTrans(postdata,df_list(temp_name))
-
+        df_list(temp_name).printSchema()
         df_list(temp_name).show()
 
       }

@@ -17,7 +17,7 @@ import org.apache.http.message.BasicNameValuePair
   * see 传api的一种方式，接收model_id和一段字符串
   */
 
-class PostApi(model_id:String,data:String) {
+class PostApi(model_id: String, data: String) {
   private val url = "http://192.168.15.154:10086/callback/model/schema/create"
   private val client = HttpClients.createDefault()
   private val post = new HttpPost(url)

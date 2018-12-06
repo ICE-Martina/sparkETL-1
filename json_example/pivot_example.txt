@@ -1,0 +1,30 @@
+{
+        "position": {
+            "x": 4,
+            "y": 2
+        },
+        "source": [
+            "etl_x3y2"
+        ],
+        "temp_name": "etl_x4y2",
+        "type": "pivot",
+        "operation": {
+            "parms": {
+                "grouped_fields": [
+                    "pc_shop_flow_source__source",
+                    "pc_shop_flow_source__source_detail"
+                ],
+                "pivot_fields": "pc_shop_flow_source__thedate",
+                "agg_fields": [
+                    {
+                        "agg_func": "sum",
+                        "agg_value": "pc_shop_flow_source__uv"
+                    },
+                    {
+                        "agg_func": "sum",
+                        "agg_value": "pc_shop_flow_source__alipay_trade_amt"
+                    }
+                ]
+            }
+        }
+    }
